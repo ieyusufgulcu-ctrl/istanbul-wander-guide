@@ -36,6 +36,22 @@ export const experiences: Experience[] = [
     reviewCount: 1284,
     price: 1450,
     flags: ["editor"],
+    editorNote:
+      "Karaköy'ün arka sokağındaki taş bir meyhanede, Elif'in büyükannesinden devraldığı meze defterinden mevsim tabakları. Küçük bir grup, uzun bir akşam.",
+    highlights: [
+      "Açılışta soğuk meze tabağı ve ev yapımı rakı eşliği",
+      "Şefle birlikte mutfakta kısa bir meze atölyesi",
+      "Ana yemek: günün balığı ya da mevsim sebzeli güveç",
+      "Tatlı: incir tatlısı, Türk kahvesi ve sohbet",
+    ],
+    meetingPoint: "Mumhane Caddesi 14, Karaköy",
+    included: ["3 kap yemek", "Mevsim mezeleri", "Ev yapımı rakı (1 kadeh)", "Türk kahvesi"],
+    sessions: [
+      { id: "s1", dateLabel: "Cum, 26 Nisan", timeLabel: "19.30", spotsLeft: 3 },
+      { id: "s2", dateLabel: "Cmt, 27 Nisan", timeLabel: "19.30", spotsLeft: 5 },
+      { id: "s3", dateLabel: "Per, 2 Mayıs", timeLabel: "19.30", spotsLeft: 6 },
+      { id: "s4", dateLabel: "Cum, 3 Mayıs", timeLabel: "20.00", spotsLeft: 2 },
+    ],
   },
   {
     id: "exp-002",
