@@ -237,11 +237,6 @@ export function ExperienceCard({
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 p-4">
-          {experience.tagline && (
-            <p className="text-[11px] uppercase tracking-[0.2em] text-gold font-semibold mb-1.5">
-              {experience.tagline.length > 0 ? FLAG_LABEL.editor && (experience.flags?.includes("editor") ? "Editör Seçimi" : experience.neighborhood) : ""}
-            </p>
-          )}
           <h3 className="font-serif text-[22px] leading-[1.12] text-primary-foreground text-balance">
             {experience.title}
           </h3>
