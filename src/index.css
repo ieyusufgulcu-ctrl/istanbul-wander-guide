@@ -152,4 +152,6 @@ All colors MUST be HSL.
   .safe-bottom { padding-bottom: max(env(safe-area-inset-bottom), 0.75rem); }
   .text-balance { text-wrap: balance; }
   .editorial-shadow { box-shadow: var(--shadow-lg); }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }
