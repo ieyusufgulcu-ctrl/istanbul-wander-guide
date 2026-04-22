@@ -9,6 +9,7 @@ import SearchScreen from "@/screens/SearchScreen";
 import MapScreen from "@/screens/MapScreen";
 import BookingsScreen from "@/screens/BookingsScreen";
 import ProfileScreen from "@/screens/ProfileScreen";
+import ExperienceDetailScreen from "@/screens/ExperienceDetailScreen";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/map" element={<MapScreen />} />
             <Route path="/bookings" element={<BookingsScreen />} />
             <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/experience/:id" element={<ExperienceDetailScreen />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

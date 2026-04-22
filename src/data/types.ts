@@ -37,4 +37,22 @@ export interface Experience {
   originalPrice?: number;
   /** Editor's-pick / featured / new etc. */
   flags?: Array<"editor" | "new" | "limited" | "trending">;
+  /** Optional editor's note shown on the detail screen. */
+  editorNote?: string;
+  /** What guests will experience — short, scannable bullets. */
+  highlights?: string[];
+  /** Meeting point (street + neighborhood). */
+  meetingPoint?: string;
+  /** What's included in the price. */
+  included?: string[];
+  /** Upcoming sessions — keep tiny on detail screen. */
+  sessions?: Array<{
+    id: string;
+    /** Display label, e.g. "Cum, 26 Nisan". */
+    dateLabel: string;
+    /** "19.30". */
+    timeLabel: string;
+    /** Spots remaining. */
+    spotsLeft: number;
+  }>;
 }

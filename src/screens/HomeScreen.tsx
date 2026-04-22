@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Bell,
   ChevronRight,
@@ -36,6 +37,8 @@ type CategoryId = typeof CATEGORIES[number]["id"] | "all";
  */
 export default function HomeScreen() {
   const [activeCategory, setActiveCategory] = useState<CategoryId>("all");
+  const navigate = useNavigate();
+  const goTo = (id: string) => navigate(`/experience/${id}`);
 
   const editorial = experiences.find((e) => e.flags?.includes("editor")) ?? experiences[0];
   const railPicks = experiences.filter((e) => e.id !== editorial.id).slice(0, 4);
@@ -132,7 +135,11 @@ export default function HomeScreen() {
           title="Bu hafta sonu için editör notu"
           description="Tat profiline ve sevdiğin mahallelere göre üç küçük öneri."
         >
-          <ExperienceCard experience={editorial} variant="editorial" />
+          <ExperienceCard
+            experience={editorial}
+            variant="editorial"
+            onPress={() => goTo(editorial.id)}
+          />
         </Section>
       </div>
 
@@ -149,6 +156,7 @@ export default function HomeScreen() {
                 key={exp.id}
                 experience={exp}
                 variant="rail"
+                onPress={() => goTo(exp.id)}
               />
             ))}
           </HorizontalScroller>
@@ -191,7 +199,11 @@ export default function HomeScreen() {
             <ul className="flex flex-col gap-1">
               {trending.map((exp) => (
                 <li key={exp.id}>
-                  <ExperienceCard experience={exp} variant="list" />
+                  <ExperienceCard
+                    experience={exp}
+                    variant="list"
+                    onPress={() => goTo(exp.id)}
+                  />
                 </li>
               ))}
             </ul>
