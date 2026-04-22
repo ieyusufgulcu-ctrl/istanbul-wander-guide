@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowDownUp,
   Map as MapIcon,
@@ -40,6 +41,7 @@ type SortKey = "recommended" | "rating" | "priceAsc" | "priceDesc";
  * Composes Screen + atoms + product components.
  */
 export default function SearchScreen() {
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [quickCategory, setQuickCategory] = useState<ExperienceCategory | "all">("all");
   const [filters, setFilters] = useState<SearchFilters>(EMPTY_FILTERS);
@@ -171,7 +173,11 @@ export default function SearchScreen() {
                 key={exp.id}
                 className="py-3 border-b border-border/50 last:border-b-0"
               >
-                <ExperienceCard experience={exp} variant="list" />
+                  <ExperienceCard
+                    experience={exp}
+                    variant="list"
+                    onPress={() => navigate(`/experience/${exp.id}`)}
+                  />
               </li>
             ))}
           </ul>
