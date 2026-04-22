@@ -356,7 +356,7 @@ export default function MapScreen() {
 
           {/* Layer pills */}
           <div className="pl-4 pr-2">
-            <HorizontalScroller gap="xs">
+            <HorizontalScroller gap="sm">
               {LAYERS.map((l) => (
                 <Pill
                   key={l.id}
@@ -413,9 +413,7 @@ export default function MapScreen() {
                   {active.unlocked ? "Açık semt" : "Sis altında"}
                 </p>
                 {active.unlocked && active.progress >= 70 && (
-                  <Badge tone="gold" size="sm">
-                    Pasaport mührü
-                  </Badge>
+                  <Badge tone="gold">Pasaport mührü</Badge>
                 )}
               </div>
               <h3 className="font-serif text-[22px] leading-tight text-foreground mt-1">
