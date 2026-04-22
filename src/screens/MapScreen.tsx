@@ -10,7 +10,6 @@ import {
   Stamp,
 } from "lucide-react";
 import { Screen } from "@/components/primitives/Screen";
-import { BottomSheet } from "@/components/primitives/BottomSheet";
 import { HorizontalScroller } from "@/components/primitives/HorizontalScroller";
 import { IconButton } from "@/components/atoms/IconButton";
 import { Pill } from "@/components/atoms/Pill";
