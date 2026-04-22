@@ -15,19 +15,19 @@ interface MobileFrameProps {
  */
 export function MobileFrame({ children, bottomBar, className }: MobileFrameProps) {
   return (
-    <div className="min-h-screen w-full bg-muted/40 flex justify-center">
+    <div className="min-h-screen w-full bg-gradient-to-b from-muted/60 via-muted/30 to-muted/60 flex justify-center sm:py-6">
       <div
         className={cn(
-          "relative w-full max-w-[430px] min-h-screen bg-background shadow-editorial overflow-hidden",
-          "flex flex-col",
+          "relative w-full max-w-[430px] min-h-screen sm:min-h-[844px] sm:max-h-[900px] bg-background shadow-editorial overflow-hidden",
+          "flex flex-col sm:rounded-[2.25rem] sm:border sm:border-border/60",
           className,
         )}
       >
-        <div className="flex-1 overflow-y-auto overscroll-contain">
+        <div className="flex-1 overflow-y-auto overscroll-contain scroll-smooth">
           {children}
         </div>
         {bottomBar ? (
-          <div className="sticky bottom-0 left-0 right-0 z-40">{bottomBar}</div>
+          <div className="shrink-0 z-40">{bottomBar}</div>
         ) : null}
       </div>
     </div>
