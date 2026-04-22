@@ -7,7 +7,10 @@ type Size = "sm" | "md" | "lg";
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Lucide icon element. */
   icon: ReactNode;
-  /** Required for accessibility — Turkish label. */
+  /**
+   * Required accessibility label (Turkish). The button is icon-only — this
+   * label is exposed via aria-label and tooltip but never rendered visibly.
+   */
   label: string;
   variant?: Variant;
   size?: Size;
@@ -44,6 +47,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
       ref={ref}
       type="button"
       aria-label={label}
+      title={label}
       aria-pressed={active || undefined}
       className={cn(
         "relative inline-flex items-center justify-center rounded-full",
