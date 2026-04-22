@@ -13,6 +13,7 @@ import ProfileScreen from "@/screens/ProfileScreen";
 import ExperienceDetailScreen from "@/screens/ExperienceDetailScreen";
 import CheckoutScreen from "@/screens/CheckoutScreen";
 import ConfirmationScreen from "@/screens/ConfirmationScreen";
+import OnboardingScreen from "@/screens/OnboardingScreen";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -53,6 +54,15 @@ const App = () => (
             element={
               <MobileFrame>
                 <ConfirmationScreen />
+              </MobileFrame>
+            }
+          />
+          {/* Modal — full-screen, no tab bar */}
+          <Route
+            path="/onboarding"
+            element={
+              <MobileFrame>
+                <OnboardingScreen />
               </MobileFrame>
             }
           />
