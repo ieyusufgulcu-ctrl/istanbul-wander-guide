@@ -63,7 +63,7 @@ export default function ExperienceDetailScreen() {
             size="lg"
             block
             onClick={() => {
-              /* navigate to /booking/[id] later */
+              navigate(`/checkout/${experience.id}?session=${selectedSession}`);
             }}
           >
             Yer ayırt
