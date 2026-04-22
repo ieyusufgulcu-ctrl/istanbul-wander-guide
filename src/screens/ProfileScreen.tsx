@@ -168,7 +168,7 @@ export default function ProfileScreen() {
           action={{ label: "Tümü", onClick: () => {} }}
           bleed
         >
-          <HorizontalScroller gap="md" className="px-5">
+          <HorizontalScroller gap="md">
             {BADGES.map((b) => (
               <BadgeCard key={b.id} badge={b} />
             ))}
@@ -220,7 +220,7 @@ export default function ProfileScreen() {
             action={{ label: "Tümü", onClick: () => navigate("/search") }}
             bleed
           >
-            <HorizontalScroller gap="md" className="px-5">
+            <HorizontalScroller gap="md">
               {wishlist.map((e) => (
                 <div key={e.id} className="w-[260px] shrink-0">
                   <ExperienceCard
