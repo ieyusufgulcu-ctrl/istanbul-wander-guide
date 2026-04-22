@@ -19,6 +19,25 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        surface: {
+          DEFAULT: "hsl(var(--surface))",
+          elevated: "hsl(var(--surface-elevated))",
+          warm: "hsl(var(--surface-warm))",
+        },
+        navy: {
+          DEFAULT: "hsl(var(--navy))",
+          soft: "hsl(var(--navy-soft))",
+          bright: "hsl(var(--navy-bright))",
+        },
+        gold: {
+          DEFAULT: "hsl(var(--gold))",
+          soft: "hsl(var(--gold-soft))",
+          tint: "hsl(var(--gold-tint))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -58,7 +77,24 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
       },
+      fontFamily: {
+        serif: ["'Playfair Display'", "Georgia", "serif"],
+        sans: ["'DM Sans'", "system-ui", "sans-serif"],
+      },
+      backgroundImage: {
+        "gradient-hero": "var(--gradient-hero)",
+        "gradient-gold": "var(--gradient-gold)",
+        "gradient-navy": "var(--gradient-navy)",
+      },
+      boxShadow: {
+        soft: "var(--shadow-sm)",
+        elevated: "var(--shadow-md)",
+        editorial: "var(--shadow-lg)",
+        sheet: "var(--shadow-sheet)",
+      },
       borderRadius: {
+        xl: "calc(var(--radius) + 4px)",
+        "2xl": "calc(var(--radius) + 12px)",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
