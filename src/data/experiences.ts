@@ -1,6 +1,12 @@
 import karakoyImg from "@/assets/exp-karakoy-meyhane.jpg";
 import balatImg from "@/assets/exp-balat-ceramic.jpg";
 import kuzguncukImg from "@/assets/exp-kuzguncuk-walk.jpg";
+import cihangirImg from "@/assets/exp-cihangir-rooftop.jpg";
+import uskudarImg from "@/assets/exp-uskudar-hammam.jpg";
+import modaImg from "@/assets/exp-moda-cafe.jpg";
+import nbhBalat from "@/assets/nbh-balat.jpg";
+import nbhKarakoy from "@/assets/nbh-karakoy.jpg";
+import nbhKadikoy from "@/assets/nbh-kadikoy.jpg";
 import { Experience } from "./types";
 
 /**
@@ -77,7 +83,107 @@ export const experiences: Experience[] = [
     price: 450,
     flags: ["trending"],
   },
+  {
+    id: "exp-004",
+    slug: "cihangir-catikatinda-aksam-yemegi",
+    title: "Cihangir'de Çatı Katında Akşam Yemeği",
+    tagline: "Boğaz manzaralı küçük terasta, mevsimin tatları.",
+    category: "gastronomi",
+    neighborhood: "Cihangir",
+    durationMinutes: 165,
+    groupSize: "2–8 kişi",
+    language: "Türkçe & İngilizce",
+    imageUrl: cihangirImg,
+    organizer: {
+      id: "org-deniz",
+      name: "Deniz Aksoy",
+      role: "Ev şefi · Cihangir",
+      verified: true,
+      hostedCount: 76,
+    },
+    rating: 4.9,
+    reviewCount: 218,
+    price: 1750,
+    flags: ["editor"],
+  },
+  {
+    id: "exp-005",
+    slug: "uskudar-tarihi-hamam-deneyimi",
+    title: "Üsküdar'da Tarihi Hamam Deneyimi",
+    tagline: "Yüz yıllık mermerlerde, yavaş bir öğleden sonra.",
+    category: "wellness",
+    neighborhood: "Üsküdar",
+    durationMinutes: 90,
+    groupSize: "1–4 kişi",
+    language: "Türkçe & İngilizce",
+    imageUrl: uskudarImg,
+    organizer: {
+      id: "org-cemile",
+      name: "Cemile Hanım Hamamı",
+      role: "Tarihi hamam · Üsküdar",
+      verified: true,
+      hostedCount: 540,
+    },
+    rating: 4.8,
+    reviewCount: 932,
+    price: 1200,
+  },
+  {
+    id: "exp-006",
+    slug: "moda-sahil-kahve-turu",
+    title: "Moda Sahilinde Üçüncü Nesil Kahve Turu",
+    tagline: "Üç küçük kavurucuda tadım, kısa sahil yürüyüşü.",
+    category: "gastronomi",
+    neighborhood: "Kadıköy",
+    durationMinutes: 120,
+    groupSize: "2–8 kişi",
+    language: "Türkçe & İngilizce",
+    imageUrl: modaImg,
+    organizer: {
+      id: "org-burak",
+      name: "Burak Tunç",
+      role: "Kahve uzmanı · Moda",
+      verified: true,
+      hostedCount: 158,
+    },
+    rating: 4.7,
+    reviewCount: 287,
+    price: 620,
+    flags: ["trending"],
+  },
 ];
 
 export const getExperienceById = (id: string) =>
   experiences.find((e) => e.id === id);
+
+export interface Neighborhood {
+  id: string;
+  name: string;
+  tagline: string;
+  experienceCount: number;
+  imageUrl: string;
+}
+
+export const neighborhoods: Neighborhood[] = [
+  {
+    id: "nbh-balat",
+    name: "Balat",
+    tagline: "Renkli sokaklar, sakin atölyeler",
+    experienceCount: 24,
+    imageUrl: nbhBalat,
+  },
+  {
+    id: "nbh-karakoy",
+    name: "Karaköy",
+    tagline: "Tarihi liman, modern sofralar",
+    experienceCount: 38,
+    imageUrl: nbhKarakoy,
+  },
+  {
+    id: "nbh-kadikoy",
+    name: "Kadıköy",
+    tagline: "Moda sahili ve yerel ritim",
+    experienceCount: 46,
+    imageUrl: nbhKadikoy,
+  },
+];
