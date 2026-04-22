@@ -1,13 +1,5 @@
-import { Sparkles } from "lucide-react";
-import { PlaceholderScreen } from "@/components/layout/PlaceholderScreen";
+// Temporary: while the design system is being reviewed, the Home tab renders
+// the atoms preview. Will be replaced by the real Discover screen in Step 5.
+import AtomsPreviewScreen from "./_AtomsPreviewScreen";
 
-export default function HomeScreen() {
-  return (
-    <PlaceholderScreen
-      eyebrow="Ana Sayfa"
-      title="İstanbul'u yeniden keşfet"
-      description="Editöryel koleksiyonlar, sana özel öneriler ve mahalle hikâyeleri burada belirecek."
-      icon={<Sparkles className="h-7 w-7" strokeWidth={1.75} />}
-    />
-  );
-}
+export default AtomsPreviewScreen;
