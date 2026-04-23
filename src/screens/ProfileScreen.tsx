@@ -278,7 +278,13 @@ export default function ProfileScreen() {
         <Section eyebrow="Hesap" title="Ayarlar ve destek">
           <div className="rounded-2xl bg-card border border-border/60 overflow-hidden shadow-sm">
             <AccountRow icon={<Receipt />} label="Rezervasyonlarım" hint={`${TIMELINE.length} aktif`} onClick={() => navigate("/bookings")} />
-            <AccountRow icon={<Heart />} label="Favoriler" hint={`${wishlist.length} deneyim`} />
+            <AccountRow
+              icon={<Heart />}
+              label="Favoriler"
+              hint={
+                wishlist.length > 0 ? `${wishlist.length} deneyim` : "Henüz boş"
+              }
+            />
             <AccountRow icon={<Award />} label="Pasaport detayı" hint={`%${totalProgress}`} />
             <AccountRow icon={<Settings />} label="Tercihler" last />
           </div>
