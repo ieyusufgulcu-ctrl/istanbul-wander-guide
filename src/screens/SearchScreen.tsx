@@ -362,29 +362,6 @@ function SortSheet({
   );
 }
 
-/* -------------------------------- empty UI -------------------------------- */
-
-function EmptyState({ onReset }: { onReset: () => void }) {
-  return (
-    <div className="py-16 text-center">
-      <div className="mx-auto h-12 w-12 rounded-2xl bg-surface-warm border border-border/70 flex items-center justify-center text-muted-foreground mb-4">
-        <Search className="h-5 w-5" strokeWidth={1.75} />
-      </div>
-      <p className="font-serif text-[18px] text-foreground">Sonuç bulunamadı</p>
-      <p className="mt-1.5 text-[13px] text-muted-foreground">
-        Filtreleri biraz gevşetip tekrar deneyebilirsin.
-      </p>
-      <button
-        type="button"
-        onClick={onReset}
-        className="mt-4 h-10 px-4 rounded-full bg-primary text-primary-foreground text-[13px] font-semibold active:scale-[0.98] transition-transform"
-      >
-        Filtreleri sıfırla
-      </button>
-    </div>
-  );
-}
-
 /* --------------------------------- logic --------------------------------- */
 
 const CATEGORY_LABEL: Record<ExperienceCategory, string> = {
