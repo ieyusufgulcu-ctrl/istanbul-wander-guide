@@ -18,6 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/atoms/Button";
 import { Chip } from "@/components/atoms/Chip";
+import { storage, STORAGE_KEYS } from "@/lib/storage";
 
 type StepKey = "vibe" | "neighborhoods" | "intent" | "complete";
 
@@ -80,7 +81,10 @@ export default function OnboardingScreen() {
     return true;
   }, [step, vibes, hoods, intent]);
 
-  const finish = () => navigate("/", { replace: true });
+  const finish = () => {
+    storage.set(STORAGE_KEYS.onboarded, "1");
+    navigate("/", { replace: true });
+  };
 
   const next = () => {
     if (stepIndex < STEP_ORDER.length - 1) setStepIndex((i) => i + 1);

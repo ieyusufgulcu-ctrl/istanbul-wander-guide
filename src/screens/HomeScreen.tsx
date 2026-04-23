@@ -21,6 +21,14 @@ import {
 } from "@/components/product";
 import { experiences, neighborhoods } from "@/data/experiences";
 import { cn } from "@/lib/utils";
+import { useFakeLoading } from "@/hooks/useFakeLoading";
+import { useSavedExperiences } from "@/hooks/useSavedExperiences";
+import { storage, STORAGE_KEYS } from "@/lib/storage";
+import {
+  EditorialCardSkeleton,
+  RailSkeleton,
+  ListRowSkeleton,
+} from "@/components/feedback/Skeletons";
 
 const CATEGORIES = [
   { id: "gastronomi", label: "Gastronomi", icon: UtensilsCrossed },
@@ -36,9 +44,17 @@ type CategoryId = typeof CATEGORIES[number]["id"] | "all";
  * Composed entirely from primitives, atoms and product components.
  */
 export default function HomeScreen() {
-  const [activeCategory, setActiveCategory] = useState<CategoryId>("all");
+  const [activeCategory, setActiveCategory] = useState<CategoryId>(
+    () => (storage.get<CategoryId>(STORAGE_KEYS.homeCategory) ?? "all"),
+  );
+  const setCategory = (c: CategoryId) => {
+    setActiveCategory(c);
+    storage.set(STORAGE_KEYS.homeCategory, c);
+  };
   const navigate = useNavigate();
   const goTo = (id: string) => navigate(`/experience/${id}`);
+  const loading = useFakeLoading();
+  const { isSaved, toggle } = useSavedExperiences();
 
   const editorial = experiences.find((e) => e.flags?.includes("editor")) ?? experiences[0];
   const railPicks = experiences.filter((e) => e.id !== editorial.id).slice(0, 4);
@@ -108,7 +124,7 @@ export default function HomeScreen() {
         <HorizontalScroller gap="sm">
           <Pill
             selected={activeCategory === "all"}
-            onClick={() => setActiveCategory("all")}
+            onClick={() => setCategory("all")}
           >
             Tümü
           </Pill>
@@ -119,7 +135,7 @@ export default function HomeScreen() {
                 key={cat.id}
                 selected={activeCategory === cat.id}
                 icon={<Icon strokeWidth={1.75} />}
-                onClick={() => setActiveCategory(cat.id)}
+                onClick={() => setCategory(cat.id)}
               >
                 {cat.label}
               </Pill>
@@ -135,11 +151,17 @@ export default function HomeScreen() {
           title="Bu hafta sonu için editör notu"
           description="Tat profiline ve sevdiğin mahallelere göre üç küçük öneri."
         >
-          <ExperienceCard
-            experience={editorial}
-            variant="editorial"
-            onPress={() => goTo(editorial.id)}
-          />
+          {loading ? (
+            <EditorialCardSkeleton />
+          ) : (
+            <ExperienceCard
+              experience={editorial}
+              variant="editorial"
+              onPress={() => goTo(editorial.id)}
+              saved={isSaved(editorial.id)}
+              onToggleSave={() => toggle(editorial.id)}
+            />
+          )}
         </Section>
       </div>
 
@@ -150,16 +172,24 @@ export default function HomeScreen() {
           action={{ label: "Tümünü gör" }}
           bleed
         >
-          <HorizontalScroller>
-            {railPicks.map((exp) => (
-              <ExperienceCard
-                key={exp.id}
-                experience={exp}
-                variant="rail"
-                onPress={() => goTo(exp.id)}
-              />
-            ))}
-          </HorizontalScroller>
+          {loading ? (
+            <div className="px-5">
+              <RailSkeleton count={3} />
+            </div>
+          ) : (
+            <HorizontalScroller>
+              {railPicks.map((exp) => (
+                <ExperienceCard
+                  key={exp.id}
+                  experience={exp}
+                  variant="rail"
+                  onPress={() => goTo(exp.id)}
+                  saved={isSaved(exp.id)}
+                  onToggleSave={() => toggle(exp.id)}
+                />
+              ))}
+            </HorizontalScroller>
+          )}
         </Section>
       </div>
 
@@ -196,17 +226,26 @@ export default function HomeScreen() {
       {trending.length > 0 && (
         <div className="px-5">
           <Section title="Bu aralar konuşulanlar" action={{ label: "Tümü" }}>
-            <ul className="flex flex-col gap-1">
-              {trending.map((exp) => (
-                <li key={exp.id}>
-                  <ExperienceCard
-                    experience={exp}
-                    variant="list"
-                    onPress={() => goTo(exp.id)}
-                  />
-                </li>
-              ))}
-            </ul>
+            {loading ? (
+              <div className="flex flex-col gap-2">
+                <ListRowSkeleton />
+                <ListRowSkeleton />
+              </div>
+            ) : (
+              <ul className="flex flex-col gap-1">
+                {trending.map((exp) => (
+                  <li key={exp.id}>
+                    <ExperienceCard
+                      experience={exp}
+                      variant="list"
+                      onPress={() => goTo(exp.id)}
+                      saved={isSaved(exp.id)}
+                      onToggleSave={() => toggle(exp.id)}
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
           </Section>
         </div>
       )}

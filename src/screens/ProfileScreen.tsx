@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Award,
   ChevronRight,
@@ -20,8 +20,10 @@ import { Badge } from "@/components/atoms/Badge";
 import { IconButton } from "@/components/atoms/IconButton";
 import { Button } from "@/components/atoms/Button";
 import { ExperienceCard } from "@/components/product/ExperienceCard";
-import { experiences } from "@/data/experiences";
+import { experiences, getExperienceById } from "@/data/experiences";
 import { cn } from "@/lib/utils";
+import { useSavedExperiences } from "@/hooks/useSavedExperiences";
+import { EmptyState } from "@/components/feedback/EmptyState";
 
 interface DistrictStamp {
   id: string;
@@ -65,16 +67,28 @@ const TIMELINE = [
 
 export default function ProfileScreen() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const forceEmpty = params.get("empty") === "1";
+  const { ids: savedIds } = useSavedExperiences();
 
-  const unlockedCount = STAMPS.filter((s) => s.unlocked).length;
+  const stamps = forceEmpty
+    ? STAMPS.map((s) => ({ ...s, unlocked: false, progress: 0, date: undefined }))
+    : STAMPS;
+  const unlockedCount = stamps.filter((s) => s.unlocked).length;
   const totalProgress = Math.round(
-    STAMPS.reduce((s, d) => s + d.progress, 0) / STAMPS.length,
+    stamps.reduce((s, d) => s + d.progress, 0) / stamps.length,
   );
   const points = 1280;
   const nextLevelAt = 1500;
   const levelPct = Math.round((points / nextLevelAt) * 100);
 
-  const wishlist = useMemo(() => experiences.slice(0, 4), []);
+  const wishlist = useMemo(
+    () =>
+      savedIds
+        .map((id) => getExperienceById(id))
+        .filter((e): e is NonNullable<typeof e> => Boolean(e)),
+    [savedIds],
+  );
 
   return (
     <Screen
@@ -152,11 +166,22 @@ export default function ProfileScreen() {
           description={`${unlockedCount}/${STAMPS.length} semt · %${totalProgress} keşif`}
           action={{ label: "Haritada gör", onClick: () => navigate("/map") }}
         >
-          <div className="grid grid-cols-3 gap-3">
-            {STAMPS.map((s) => (
-              <StampTile key={s.id} stamp={s} />
-            ))}
-          </div>
+          {unlockedCount === 0 ? (
+            <EmptyState
+              framed
+              icon={<StampIcon />}
+              title="Pasaportun henüz boş"
+              description="İlk deneyimini tamamladığında semt mühürlerin burada belirir."
+              actionLabel="Keşfetmeye başla"
+              onAction={() => navigate("/")}
+            />
+          ) : (
+            <div className="grid grid-cols-3 gap-3">
+              {stamps.map((s) => (
+                <StampTile key={s.id} stamp={s} />
+              ))}
+            </div>
+          )}
         </Section>
       </div>
 
@@ -220,17 +245,30 @@ export default function ProfileScreen() {
             action={{ label: "Tümü", onClick: () => navigate("/search") }}
             bleed
           >
-            <HorizontalScroller gap="md">
-              {wishlist.map((e) => (
-                <div key={e.id} className="w-[260px] shrink-0">
-                  <ExperienceCard
-                    experience={e}
-                    variant="rail"
-                    onPress={() => navigate(`/experience/${e.id}`)}
-                  />
-                </div>
-              ))}
-            </HorizontalScroller>
+            {wishlist.length === 0 ? (
+              <div className="px-5">
+                <EmptyState
+                  framed
+                  icon={<Heart />}
+                  title="Kaydedilmiş deneyim yok"
+                  description="Beğendiğin bir deneyimin sağ üstündeki kalbe dokun, burada toplansın."
+                  actionLabel="Deneyim keşfet"
+                  onAction={() => navigate("/search")}
+                />
+              </div>
+            ) : (
+              <HorizontalScroller gap="md">
+                {wishlist.map((e) => (
+                  <div key={e.id} className="w-[260px] shrink-0">
+                    <ExperienceCard
+                      experience={e}
+                      variant="rail"
+                      onPress={() => navigate(`/experience/${e.id}`)}
+                    />
+                  </div>
+                ))}
+              </HorizontalScroller>
+            )}
           </Section>
         </div>
       </div>
@@ -240,7 +278,13 @@ export default function ProfileScreen() {
         <Section eyebrow="Hesap" title="Ayarlar ve destek">
           <div className="rounded-2xl bg-card border border-border/60 overflow-hidden shadow-sm">
             <AccountRow icon={<Receipt />} label="Rezervasyonlarım" hint={`${TIMELINE.length} aktif`} onClick={() => navigate("/bookings")} />
-            <AccountRow icon={<Heart />} label="Favoriler" hint={`${wishlist.length} deneyim`} />
+            <AccountRow
+              icon={<Heart />}
+              label="Favoriler"
+              hint={
+                wishlist.length > 0 ? `${wishlist.length} deneyim` : "Henüz boş"
+              }
+            />
             <AccountRow icon={<Award />} label="Pasaport detayı" hint={`%${totalProgress}`} />
             <AccountRow icon={<Settings />} label="Tercihler" last />
           </div>

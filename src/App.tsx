@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,9 +15,36 @@ import ExperienceDetailScreen from "@/screens/ExperienceDetailScreen";
 import CheckoutScreen from "@/screens/CheckoutScreen";
 import ConfirmationScreen from "@/screens/ConfirmationScreen";
 import OnboardingScreen from "@/screens/OnboardingScreen";
+import { storage, STORAGE_KEYS } from "@/lib/storage";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
+
+/**
+ * OnboardingGate — soft first-visit redirect to /onboarding.
+ * Uses a localStorage flag, no auth, fully skippable. Once the user
+ * completes or skips onboarding, they never see this gate again.
+ */
+function OnboardingGate({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  const [decided, setDecided] = useState(false);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  useEffect(() => {
+    const onboarded = storage.get<string>(STORAGE_KEYS.onboarded);
+    // Only auto-redirect when landing on the root tab. Deep links / detail
+    // screens / direct /onboarding all stay on their requested route.
+    if (!onboarded && location.pathname === "/") {
+      setShouldRedirect(true);
+    }
+    setDecided(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!decided) return null;
+  if (shouldRedirect) return <Navigate to="/onboarding" replace />;
+  return <>{children}</>;
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -24,6 +52,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <OnboardingGate>
         <Routes>
           <Route element={<AppShell />}>
             <Route path="/" element={<HomeScreen />} />
@@ -69,6 +98,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </OnboardingGate>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

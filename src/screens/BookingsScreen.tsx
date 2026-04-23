@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Bell,
   Calendar,
   ChevronRight,
+  Compass,
   Heart,
   MapPin,
   MessageCircle,
@@ -23,6 +24,9 @@ import { IconButton } from "@/components/atoms/IconButton";
 import { MetadataRow } from "@/components/atoms/MetadataRow";
 import { VerifiedBadge } from "@/components/atoms/VerifiedBadge";
 import { experiences, getExperienceById } from "@/data/experiences";
+import { useFakeLoading } from "@/hooks/useFakeLoading";
+import { BookingsListSkeleton } from "@/components/feedback/Skeletons";
+import { EmptyState } from "@/components/feedback/EmptyState";
 
 type SegmentKey = "upcoming" | "past" | "messages";
 
@@ -144,17 +148,23 @@ const STATUS_TONE: Record<BookingStatus, "gold" | "success" | "warning"> = {
 export default function BookingsScreen() {
   const navigate = useNavigate();
   const [segment, setSegment] = useState<SegmentKey>("upcoming");
+  const [params] = useSearchParams();
+  const forceEmpty = params.get("empty") === "1";
+  const loading = useFakeLoading();
 
-  const next = UPCOMING[0];
+  const upcoming = forceEmpty ? [] : UPCOMING;
+  const past = forceEmpty ? [] : PAST;
+  const threads = forceEmpty ? [] : THREADS;
+  const next = upcoming[0];
   const nextExp = next ? getExperienceById(next.experienceId) : undefined;
 
   const counts = useMemo(
     () => ({
-      upcoming: UPCOMING.length,
-      past: PAST.length,
-      messages: THREADS.filter((t) => t.unread).length,
+      upcoming: upcoming.length,
+      past: past.length,
+      messages: threads.filter((t) => t.unread).length,
     }),
-    [],
+    [upcoming, past, threads],
   );
 
   return (
@@ -177,7 +187,9 @@ export default function BookingsScreen() {
     >
       {/* Hero summary — next booking */}
       <div className="pt-3">
-        {next && nextExp ? (
+        {loading ? (
+          <div className="rounded-[1.5rem] bg-muted/60 h-[152px] animate-pulse" />
+        ) : next && nextExp ? (
           <button
             type="button"
             onClick={() => navigate(`/experience/${nextExp.id}`)}
@@ -232,7 +244,19 @@ export default function BookingsScreen() {
               </span>
             </div>
           </button>
-        ) : null}
+        ) : (
+          <div className="rounded-[1.5rem] bg-surface-warm border border-border/60 px-5 py-6 text-center">
+            <p className="text-[10.5px] uppercase tracking-[0.2em] text-gold font-semibold">
+              Henüz rezervasyon yok
+            </p>
+            <p className="mt-2 font-serif text-[18px] leading-tight text-foreground text-balance">
+              İlk küçük buluşmanı planla
+            </p>
+            <p className="mt-1.5 text-[12.5px] text-muted-foreground">
+              Editör seçimleri ve mahalle önerileri seni bekliyor.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Segmented control */}
@@ -264,20 +288,60 @@ export default function BookingsScreen() {
       </div>
 
       {/* Content */}
-      {segment === "upcoming" && (
-        <UpcomingList
-          items={UPCOMING}
-          onOpen={(id) => navigate(`/experience/${id}`)}
-        />
-      )}
-      {segment === "past" && (
-        <PastList items={PAST} onOpen={(id) => navigate(`/experience/${id}`)} />
-      )}
-      {segment === "messages" && (
-        <MessagesList
-          items={THREADS}
-          onOpen={(id) => navigate(`/experience/${id}`)}
-        />
+      {loading ? (
+        <Section className="mt-6">
+          <BookingsListSkeleton count={3} />
+        </Section>
+      ) : (
+        <>
+          {segment === "upcoming" &&
+            (upcoming.length > 0 ? (
+              <UpcomingList
+                items={upcoming}
+                onOpen={(id) => navigate(`/experience/${id}`)}
+              />
+            ) : (
+              <Section className="mt-6">
+                <EmptyState
+                  framed
+                  icon={<Compass />}
+                  title="Henüz yaklaşan rezervasyon yok"
+                  description="Bir deneyim ayırtınca tüm detaylar burada toplanır."
+                  actionLabel="Deneyim keşfet"
+                  onAction={() => navigate("/")}
+                />
+              </Section>
+            ))}
+          {segment === "past" &&
+            (past.length > 0 ? (
+              <PastList items={past} onOpen={(id) => navigate(`/experience/${id}`)} />
+            ) : (
+              <Section className="mt-6">
+                <EmptyState
+                  framed
+                  icon={<Star />}
+                  title="Geçmiş yolculuğun henüz başlamadı"
+                  description="Tamamladığın deneyimler burada toplanır."
+                />
+              </Section>
+            ))}
+          {segment === "messages" &&
+            (threads.length > 0 ? (
+              <MessagesList
+                items={threads}
+                onOpen={(id) => navigate(`/experience/${id}`)}
+              />
+            ) : (
+              <Section className="mt-6">
+                <EmptyState
+                  framed
+                  icon={<MessageCircle />}
+                  title="Aktif mesaj yok"
+                  description="Mesajlar yalnızca aktif rezervasyonların organizatörleriyle açılır."
+                />
+              </Section>
+            ))}
+        </>
       )}
 
       {/* Support reassurance */}

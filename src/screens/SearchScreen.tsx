@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   ArrowDownUp,
   Map as MapIcon,
@@ -18,6 +18,11 @@ import {
 import { experiences } from "@/data/experiences";
 import { Experience, ExperienceCategory } from "@/data/types";
 import { cn } from "@/lib/utils";
+import { useFakeLoading } from "@/hooks/useFakeLoading";
+import { useSavedExperiences } from "@/hooks/useSavedExperiences";
+import { storage, STORAGE_KEYS } from "@/lib/storage";
+import { ListSkeleton } from "@/components/feedback/Skeletons";
+import { EmptyState } from "@/components/feedback/EmptyState";
 
 const QUICK_CATEGORIES: { id: ExperienceCategory | "all"; label: string }[] = [
   { id: "all", label: "Tümü" },
@@ -42,16 +47,29 @@ type SortKey = "recommended" | "rating" | "priceAsc" | "priceDesc";
  */
 export default function SearchScreen() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const forceEmpty = params.get("empty") === "1";
   const [query, setQuery] = useState("");
-  const [quickCategory, setQuickCategory] = useState<ExperienceCategory | "all">("all");
+  const [quickCategory, setQuickCategory] = useState<ExperienceCategory | "all">(
+    () => storage.get<ExperienceCategory | "all">(STORAGE_KEYS.searchCategory) ?? "all",
+  );
+  const setQuickCategoryPersist = (c: ExperienceCategory | "all") => {
+    setQuickCategory(c);
+    storage.set(STORAGE_KEYS.searchCategory, c);
+  };
   const [filters, setFilters] = useState<SearchFilters>(EMPTY_FILTERS);
   const [sort, setSort] = useState<SortKey>("recommended");
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
+  const loading = useFakeLoading();
+  const { isSaved, toggle } = useSavedExperiences();
 
   const results = useMemo(
-    () => filterAndSort(experiences, { query, quickCategory, filters, sort }),
-    [query, quickCategory, filters, sort],
+    () =>
+      forceEmpty
+        ? []
+        : filterAndSort(experiences, { query, quickCategory, filters, sort }),
+    [forceEmpty, query, quickCategory, filters, sort],
   );
 
   const previewCount = useMemo(
@@ -116,7 +134,7 @@ export default function SearchScreen() {
                 key={cat.id}
                 size="sm"
                 selected={quickCategory === cat.id}
-                onClick={() => setQuickCategory(cat.id)}
+                onClick={() => setQuickCategoryPersist(cat.id)}
               >
                 {cat.label}
               </Pill>
@@ -164,8 +182,22 @@ export default function SearchScreen() {
 
       {/* 4. Results */}
       <div className="px-5">
-        {results.length === 0 ? (
-          <EmptyState onReset={() => { setFilters(EMPTY_FILTERS); setQuery(""); setQuickCategory("all"); }} />
+        {loading ? (
+          <ListSkeleton count={4} />
+        ) : results.length === 0 ? (
+          <EmptyState
+            framed
+            icon={<Search />}
+            title="Bu filtrelere uyan deneyim yok"
+            description="Filtreleri biraz gevşetip ya da farklı bir mahalle deneyebilirsin."
+            actionLabel="Filtreleri sıfırla"
+            onAction={() => {
+              setFilters(EMPTY_FILTERS);
+              setQuery("");
+              setQuickCategoryPersist("all");
+            }}
+            className="my-4"
+          />
         ) : (
           <ul className="flex flex-col">
             {results.map((exp) => (
@@ -177,6 +209,8 @@ export default function SearchScreen() {
                     experience={exp}
                     variant="list"
                     onPress={() => navigate(`/experience/${exp.id}`)}
+                    saved={isSaved(exp.id)}
+                    onToggleSave={() => toggle(exp.id)}
                   />
               </li>
             ))}
@@ -325,29 +359,6 @@ function SortSheet({
         })}
       </ul>
     </BottomSheet>
-  );
-}
-
-/* -------------------------------- empty UI -------------------------------- */
-
-function EmptyState({ onReset }: { onReset: () => void }) {
-  return (
-    <div className="py-16 text-center">
-      <div className="mx-auto h-12 w-12 rounded-2xl bg-surface-warm border border-border/70 flex items-center justify-center text-muted-foreground mb-4">
-        <Search className="h-5 w-5" strokeWidth={1.75} />
-      </div>
-      <p className="font-serif text-[18px] text-foreground">Sonuç bulunamadı</p>
-      <p className="mt-1.5 text-[13px] text-muted-foreground">
-        Filtreleri biraz gevşetip tekrar deneyebilirsin.
-      </p>
-      <button
-        type="button"
-        onClick={onReset}
-        className="mt-4 h-10 px-4 rounded-full bg-primary text-primary-foreground text-[13px] font-semibold active:scale-[0.98] transition-transform"
-      >
-        Filtreleri sıfırla
-      </button>
-    </div>
   );
 }
 
