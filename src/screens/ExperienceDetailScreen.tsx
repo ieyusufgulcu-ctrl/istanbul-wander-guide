@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useFakeLoading } from "@/hooks/useFakeLoading";
+import { useSavedExperiences } from "@/hooks/useSavedExperiences";
+import { DetailHeroSkeleton } from "@/components/feedback/Skeletons";
 import {
   CalendarCheck,
   ChevronLeft,
@@ -40,9 +43,19 @@ export default function ExperienceDetailScreen() {
     experiences.find((e) => e.flags?.includes("editor")) ??
     experiences[0];
 
-  const [saved, setSaved] = useState(false);
+  const { isSaved, toggle } = useSavedExperiences();
+  const saved = isSaved(experience.id);
   const sessions = experience.sessions ?? [];
   const [selectedSession, setSelectedSession] = useState<string>(sessions[0]?.id ?? "");
+  const loading = useFakeLoading();
+
+  if (loading) {
+    return (
+      <Screen padded={false} safeTop={false}>
+        <DetailHeroSkeleton />
+      </Screen>
+    );
+  }
 
   return (
     <Screen
@@ -103,7 +116,7 @@ export default function ExperienceDetailScreen() {
               variant="glass"
               size="md"
               active={saved}
-              onClick={() => setSaved((v) => !v)}
+              onClick={() => toggle(experience.id)}
             />
           </div>
         </div>
