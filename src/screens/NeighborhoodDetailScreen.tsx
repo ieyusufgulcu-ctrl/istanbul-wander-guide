@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Compass, MapPin, Sparkles, Stamp } from "lucide-react";
 import { Screen } from "@/components/primitives/Screen";
@@ -7,7 +7,12 @@ import { TopBar } from "@/components/primitives/TopBar";
 import { Badge } from "@/components/atoms/Badge";
 import { Button } from "@/components/atoms/Button";
 import { ExperienceCard } from "@/components/product/ExperienceCard";
-import { experiences, neighborhoods } from "@/data/experiences";
+import {
+  experiences,
+  getNeighborhoodBySlug,
+  neighborhoods,
+  neighborhoodSlug,
+} from "@/data/experiences";
 import { cn } from "@/lib/utils";
 
 const NEIGHBORHOOD_BLURB: Record<string, string> = {
@@ -33,13 +38,21 @@ export default function NeighborhoodDetailScreen() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
 
-  // Resolve from neighborhoods list or fall back by slug match.
-  const nbh = useMemo(() => {
-    return (
-      neighborhoods.find((n) => n.id === slug || n.name.toLowerCase() === slug?.toLowerCase()) ??
-      neighborhoods[0]
-    );
-  }, [slug]);
+  // Resolve from canonical slug, legacy id, or display name. Falls back to
+  // the first neighborhood if nothing matches so the screen never blanks.
+  const nbh = useMemo(
+    () => getNeighborhoodBySlug(slug) ?? neighborhoods[0],
+    [slug],
+  );
+  const canonical = neighborhoodSlug(nbh);
+
+  // If the URL param isn't already the canonical slug, redirect so we don't
+  // accumulate duplicate paths (e.g. /neighborhood/nbh-balat → /neighborhood/balat).
+  useEffect(() => {
+    if (slug && slug !== canonical) {
+      navigate(`/neighborhood/${canonical}`, { replace: true });
+    }
+  }, [slug, canonical, navigate]);
 
   const list = useMemo(
     () => experiences.filter((e) => e.neighborhood === nbh.name),

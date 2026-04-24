@@ -19,7 +19,7 @@ import {
   NeighborhoodCard,
   TrustCard,
 } from "@/components/product";
-import { experiences, neighborhoods } from "@/data/experiences";
+import { experiences, neighborhoods, neighborhoodSlug } from "@/data/experiences";
 import { cn } from "@/lib/utils";
 import { useFakeLoading } from "@/hooks/useFakeLoading";
 import { useSavedExperiences } from "@/hooks/useSavedExperiences";
@@ -209,7 +209,7 @@ export default function HomeScreen() {
                 tagline={nbh.tagline}
                 experienceCount={nbh.experienceCount}
                 imageUrl={nbh.imageUrl}
-                onPress={() => navigate(`/neighborhood/${nbh.id}`)}
+                onPress={() => navigate(`/neighborhood/${neighborhoodSlug(nbh)}`)}
               />
             ))}
           </HorizontalScroller>
