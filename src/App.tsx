@@ -15,6 +15,12 @@ import ExperienceDetailScreen from "@/screens/ExperienceDetailScreen";
 import CheckoutScreen from "@/screens/CheckoutScreen";
 import ConfirmationScreen from "@/screens/ConfirmationScreen";
 import OnboardingScreen from "@/screens/OnboardingScreen";
+import OrganizerDetailScreen from "@/screens/OrganizerDetailScreen";
+import SettingsScreen from "@/screens/SettingsScreen";
+import SavedScreen from "@/screens/SavedScreen";
+import BookingDetailScreen from "@/screens/BookingDetailScreen";
+import NeighborhoodDetailScreen from "@/screens/NeighborhoodDetailScreen";
+import MessageDetailScreen from "@/screens/MessageDetailScreen";
 import { storage, STORAGE_KEYS } from "@/lib/storage";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -83,6 +89,60 @@ const App = () => (
             element={
               <MobileFrame>
                 <ConfirmationScreen />
+              </MobileFrame>
+            }
+          />
+          {/* Organizer profile */}
+          <Route
+            path="/organizer/:id"
+            element={
+              <MobileFrame>
+                <OrganizerDetailScreen />
+              </MobileFrame>
+            }
+          />
+          {/* Settings / account */}
+          <Route
+            path="/settings"
+            element={
+              <MobileFrame>
+                <SettingsScreen />
+              </MobileFrame>
+            }
+          />
+          {/* Saved experiences list */}
+          <Route
+            path="/saved"
+            element={
+              <MobileFrame>
+                <SavedScreen />
+              </MobileFrame>
+            }
+          />
+          {/* Booking detail / ticket */}
+          <Route
+            path="/booking/:id"
+            element={
+              <MobileFrame>
+                <BookingDetailScreen />
+              </MobileFrame>
+            }
+          />
+          {/* Neighborhood detail */}
+          <Route
+            path="/neighborhood/:slug"
+            element={
+              <MobileFrame>
+                <NeighborhoodDetailScreen />
+              </MobileFrame>
+            }
+          />
+          {/* Message thread */}
+          <Route
+            path="/messages/:id"
+            element={
+              <MobileFrame>
+                <MessageDetailScreen />
               </MobileFrame>
             }
           />
