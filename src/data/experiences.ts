@@ -203,3 +203,47 @@ export const neighborhoods: Neighborhood[] = [
     imageUrl: nbhKadikoy,
   },
 ];
+
+/**
+ * Canonical, URL-safe slug for a neighborhood name.
+ * Lowercases, strips Turkish diacritics, replaces non-alphanumerics with `-`.
+ * Example: "Karaköy" → "karakoy", "Üsküdar" → "uskudar".
+ */
+export function slugifyNeighborhood(value: string): string {
+  const map: Record<string, string> = {
+    ç: "c", Ç: "c",
+    ğ: "g", Ğ: "g",
+    ı: "i", İ: "i",
+    ö: "o", Ö: "o",
+    ş: "s", Ş: "s",
+    ü: "u", Ü: "u",
+  };
+  return value
+    .split("")
+    .map((ch) => map[ch] ?? ch)
+    .join("")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * Resolve a neighborhood from a URL param. Accepts:
+ *  - canonical slug ("balat")
+ *  - legacy id ("nbh-balat")
+ *  - display name, raw or lowercased ("Karaköy" / "karaköy")
+ */
+export function getNeighborhoodBySlug(param: string | undefined) {
+  if (!param) return undefined;
+  const needle = param.toLowerCase();
+  return neighborhoods.find(
+    (n) =>
+      n.id === param ||
+      n.id.replace(/^nbh-/, "") === needle ||
+      slugifyNeighborhood(n.name) === needle ||
+      n.name.toLowerCase() === needle,
+  );
+}
+
+/** Canonical URL slug for a neighborhood (use everywhere we link to one). */
+export const neighborhoodSlug = (n: Neighborhood) => slugifyNeighborhood(n.name);
