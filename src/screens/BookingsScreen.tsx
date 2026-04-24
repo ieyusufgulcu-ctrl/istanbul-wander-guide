@@ -298,7 +298,7 @@ export default function BookingsScreen() {
             (upcoming.length > 0 ? (
               <UpcomingList
                 items={upcoming}
-                onOpen={(id) => navigate(`/experience/${id}`)}
+                onOpen={(id) => navigate(`/booking/${id}`)}
               />
             ) : (
               <Section className="mt-6">
@@ -314,7 +314,7 @@ export default function BookingsScreen() {
             ))}
           {segment === "past" &&
             (past.length > 0 ? (
-              <PastList items={past} onOpen={(id) => navigate(`/experience/${id}`)} />
+              <PastList items={past} onOpen={(id) => navigate(`/booking/${id}`)} />
             ) : (
               <Section className="mt-6">
                 <EmptyState
@@ -329,7 +329,7 @@ export default function BookingsScreen() {
             (threads.length > 0 ? (
               <MessagesList
                 items={threads}
-                onOpen={(id) => navigate(`/experience/${id}`)}
+                onOpen={(id) => navigate(`/messages/${id}`)}
               />
             ) : (
               <Section className="mt-6">
