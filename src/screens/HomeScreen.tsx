@@ -209,6 +209,7 @@ export default function HomeScreen() {
                 tagline={nbh.tagline}
                 experienceCount={nbh.experienceCount}
                 imageUrl={nbh.imageUrl}
+                onPress={() => navigate(`/neighborhood/${nbh.id}`)}
               />
             ))}
           </HorizontalScroller>
