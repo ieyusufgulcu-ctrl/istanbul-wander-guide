@@ -162,10 +162,10 @@ export default function BookingDetailScreen() {
               withChevron
             />
             <div className="mt-3 grid grid-cols-2 gap-2">
-              <Button variant="outline" size="sm" icon={<MessageCircle />} block>
+              <Button variant="outline" size="sm" leading={<MessageCircle />} block>
                 Mesaj
               </Button>
-              <Button variant="outline" size="sm" icon={<HelpCircle />} block>
+              <Button variant="outline" size="sm" leading={<HelpCircle />} block>
                 Destek
               </Button>
             </div>

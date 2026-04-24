@@ -122,7 +122,7 @@ export default function OrganizerDetailScreen() {
         >
           Deneyimleri gör
         </Button>
-        <Button variant="outline" size="md" icon={<MessageCircle />}>
+        <Button variant="outline" size="md" leading={<MessageCircle />}>
           Mesaj
         </Button>
       </div>

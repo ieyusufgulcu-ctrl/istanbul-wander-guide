@@ -78,7 +78,7 @@ export default function SettingsScreen() {
       <div className="px-5">
         <SettingsGroup eyebrow="Tercihler" title="Uygulama">
           <ToggleRow icon={<Bell />} label="Bildirimler" defaultOn />
-          <ToggleRow icon={<MessageCircle />} label="Mesaj uyarıları" defaultOn />
+          <ToggleRow leading={<MessageCircle />} label="Mesaj uyarıları" defaultOn />
           <ToggleRow icon={<Moon />} label="Karanlık mod" />
           <Row
             icon={<Globe />}
@@ -101,8 +101,8 @@ export default function SettingsScreen() {
       {/* Help */}
       <div className="px-5">
         <SettingsGroup eyebrow="Destek" title="Yardım merkezi">
-          <Row icon={<HelpCircle />} label="Sıkça sorulanlar" />
-          <Row icon={<MessageCircle />} label="Bize ulaş" hint="7/24" />
+          <Row leading={<HelpCircle />} label="Sıkça sorulanlar" />
+          <Row leading={<MessageCircle />} label="Bize ulaş" hint="7/24" />
           <Row icon={<Info />} label="Hakkımızda" last />
         </SettingsGroup>
       </div>
@@ -112,7 +112,7 @@ export default function SettingsScreen() {
         <Button
           variant="ghost"
           block
-          icon={<LogOut />}
+          leading={<LogOut />}
           className="text-muted-foreground"
         >
           Çıkış yap
