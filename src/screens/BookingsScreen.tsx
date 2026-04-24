@@ -192,7 +192,7 @@ export default function BookingsScreen() {
         ) : next && nextExp ? (
           <button
             type="button"
-            onClick={() => navigate(`/experience/${nextExp.id}`)}
+            onClick={() => navigate(`/booking/${nextExp.id}`)}
             className="w-full text-left rounded-[1.5rem] overflow-hidden bg-gradient-to-br from-navy to-navy-soft text-primary-foreground shadow-elevated active:scale-[0.995] transition-transform"
           >
             <div className="px-5 pt-5 pb-4">

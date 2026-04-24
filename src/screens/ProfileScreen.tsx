@@ -103,6 +103,7 @@ export default function ProfileScreen() {
               label="Ayarlar"
               variant="ghost"
               size="md"
+              onClick={() => navigate("/settings")}
             />
           }
         />
@@ -284,9 +285,20 @@ export default function ProfileScreen() {
               hint={
                 wishlist.length > 0 ? `${wishlist.length} deneyim` : "Henüz boş"
               }
+              onClick={() => navigate("/saved")}
             />
-            <AccountRow icon={<Award />} label="Pasaport detayı" hint={`%${totalProgress}`} />
-            <AccountRow icon={<Settings />} label="Tercihler" last />
+            <AccountRow
+              icon={<Award />}
+              label="Pasaport detayı"
+              hint={`%${totalProgress}`}
+              onClick={() => navigate("/map")}
+            />
+            <AccountRow
+              icon={<Settings />}
+              label="Ayarlar"
+              onClick={() => navigate("/settings")}
+              last
+            />
           </div>
 
           <div className="mt-4">

@@ -162,8 +162,17 @@ export default function ExperienceDetailScreen() {
           <OrganizerRow
             organizer={experience.organizer}
             size="md"
+            onClick={() => navigate(`/organizer/${experience.organizer.id}`)}
+            withChevron
             trailing={
-              <Button variant="outline" size="sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/messages/${experience.id}`);
+                }}
+              >
                 Mesaj
               </Button>
             }
