@@ -62,16 +62,6 @@ export default function MessageDetailScreen() {
         <TopBar
           variant="solid"
           onBack={() => navigate(-1)}
-          left={
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              className="h-11 w-11 rounded-full flex items-center justify-center text-foreground hover:bg-muted/60 active:bg-muted -ml-1"
-              aria-label="Geri"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
-          }
           right={
             <button
               type="button"
@@ -166,7 +156,7 @@ export default function MessageDetailScreen() {
           <IconButton
             icon={<Send />}
             label="Gönder"
-            variant="primary"
+            variant="gold"
             size="md"
             onClick={send}
           />
