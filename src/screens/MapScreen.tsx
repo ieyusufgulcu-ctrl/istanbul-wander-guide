@@ -161,7 +161,7 @@ export default function MapScreen() {
   return (
     <Screen padded={false} contentClassName="!pb-0" tone="default">
       {/* Map canvas */}
-      <div className="relative h-full w-full overflow-hidden bg-[hsl(207_45%_12%)]">
+      <div className="relative flex-1 min-h-[640px] w-full overflow-hidden bg-[hsl(207_45%_12%)]">
         {/* Atmospheric water gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-[hsl(207_55%_10%)] via-[hsl(207_50%_14%)] to-[hsl(207_45%_18%)]" />
         {/* Subtle grain via radial highlights */}

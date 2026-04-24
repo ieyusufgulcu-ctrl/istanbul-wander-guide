@@ -58,7 +58,7 @@ export const Screen = forwardRef<HTMLElement, ScreenProps>(function Screen(
       {topBar}
       <div
         className={cn(
-          "flex-1",
+          "flex-1 min-h-0 flex flex-col",
           safeTop && !topBar && "safe-top",
           padded && "px-5",
           // Reserve room above sticky CTA so last item isn't covered.
